@@ -29,8 +29,7 @@ def register_parent():
         )
 
         return redirect(url_for("auth.login"))
-    return redirect(url_for('auth.register_parent'))
-    #return render_template('auth/register_parent.html', errors=[])
+    return render_template('auth/register_parent.html', errors=[])
 
 
 @auth_bp.route('/register/child', methods=['GET', 'POST'])

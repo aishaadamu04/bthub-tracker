@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Student Dashboard</title>
+  </head>
+  <body>
+    <h1>Welcome, {{ child['full_name'] }}</h1>
+    <a href="/auth/logout">Logout</a>
+
+    <h2>Your Current Level</h2>
+    <div style="border: 1px solid #ccc; padding: 15px">
+      <h3>
+        {{ level_info.get('week', '') }} — {{ level_info.get('title', '') }}
+      </h3>
+      <p>Topics:</p>
+      <ul>
+        {% for topic in level_info.get('topics', []) %}
+        <li>{{ topic }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>

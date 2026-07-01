@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Parent Dashboard</title>
+  </head>
+  <body>
+    <h1>Welcome, {{ parent['full_name'] }}</h1>
+    <a href="/auth/logout">Logout</a>
+
+    <h2>Your Children</h2>
+
+    {% if children_data %} {% for item in children_data %}
+    <div style="border: 1px solid #ccc; padding: 15px; margin: 10px 0">
+      <h3>{{ item['child']['full_name'] }}</h3>
+      <p>Username: {{ item['child']['username'] }}</p>
+      <p>
+        Current Level: {{ item['child']['current_level'] }} — {{
+        item['level_info'].get('title', 'N/A') }}
+      </p>
+      <p>Week: {{ item['level_info'].get('week', 'N/A') }}</p>
+    </div>
+    {% endfor %} {% else %}
+    <p>
+      No children registered yet.
+      <a href="/auth/register/child">Register a child</a>
+    </p>
+    {% endif %}
+  </body>
+</html>

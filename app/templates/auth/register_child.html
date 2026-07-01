@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Child Registration</title>
+  </head>
+  <body>
+    <h1>Create children Account</h1>
+
+    {% for error in errors %}
+    <p style="color: red">{{ error }}</p>
+    {% endfor %}
+
+    <form method="POST">
+      <label>Full Name</label><br />
+      <input type="text" name="full_name" /><br /><br />
+
+      <label>Username</label><br />
+      <input type="text" name="username" /><br /><br />
+
+      <label>Parent's phone number</label><br />
+      <input type="text" name="parent_phone" /><br /><br />
+
+      <label>Password</label><br />
+      <input type="password" name="password" /><br /><br />
+
+      <label>Confirm Password</label><br />
+      <input type="password" name="confrim_password" /><br /><br />
+
+      <button type="submit">Register</button>
+    </form>
+  </body>
+</html>

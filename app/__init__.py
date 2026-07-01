@@ -18,4 +18,10 @@ def create_app(config_name='default'):
     from .student import student_bp
     app.register_blueprint(student_bp, url_prefix='/student')
 
+    from flask import redirect, url_for
+
+    @app.route('/')
+    def index():
+     return redirect(url_for('auth.login'))
+
     return app

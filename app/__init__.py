@@ -9,6 +9,8 @@ def create_app(config_name='default'):
     app.config.from_object(config[config_name])
 
     init_db(app)
+    from .database.seed_data import seed_quiz_questions
+    seed_quiz_questions(app)
 
     from .auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')

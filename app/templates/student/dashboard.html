@@ -9,34 +9,83 @@
     <div class="max-w-2xl mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-8">
         <h1 class="text-2xl font-bold text-gray-900">
-          Welcome, {{ child['full_name'] }}
+          Hey, {{ child['full_name'] }}! 👋
         </h1>
         <a href="/auth/logout" class="text-sm text-gray-500 hover:text-gray-700"
           >Logout</a
         >
       </div>
 
-      <h2 class="text-lg font-semibold text-gray-700 mb-4">
-        Your Current Level
-      </h2>
+      <div
+        class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 shadow-lg text-white mb-6"
+      >
+        <p class="text-indigo-100 text-sm font-medium mb-1">
+          {{ level_info.get('week', '') }}
+        </p>
+        <h2 class="text-2xl font-bold mb-4">
+          {{ level_info.get('title', '') }}
+        </h2>
 
-      <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h3 class="text-xl font-semibold text-gray-900 mb-4">
-          {{ level_info.get('week', '') }} &mdash; {{ level_info.get('title',
-          '') }}
-        </h3>
-
-        <p class="text-sm font-medium text-gray-600 mb-2">Topics:</p>
-        <ul class="flex flex-wrap gap-2">
-          {% for topic in level_info.get('topics', []) %}
-          <li
-            class="bg-blue-50 text-blue-700 text-sm font-medium px-3 py-1 rounded-full"
-          >
-            {{ topic }}
-          </li>
-          {% endfor %}
-        </ul>
+        <div class="w-full bg-white/25 rounded-full h-3 overflow-hidden">
+          <div
+            class="bg-yellow-300 h-3 rounded-full transition-all duration-700 ease-out"
+            style="width: {{ (completed_titles|length / topics|length * 100) if topics|length > 0 else 0 }}%"
+          ></div>
+        </div>
+        <p class="text-indigo-100 text-xs mt-2">
+          {{ completed_titles|length }} / {{ topics|length }} lessons complete
+        </p>
       </div>
+
+      <h3 class="text-sm font-semibold text-gray-700 mb-3">Your Lessons</h3>
+      <div class="space-y-2 mb-6">
+        {% for topic in topics %}
+        <form method="POST" action="{{ url_for('student.toggle_lesson') }}">
+          <input type="hidden" name="week_number" value="{{ week_number }}" />
+          <input type="hidden" name="lesson_title" value="{{ topic }}" />
+          <button
+            type="submit"
+            class="w-full flex items-center gap-3 bg-white border-2 rounded-xl px-4 py-3 text-left transition
+                    {{ 'border-green-400 bg-green-50' if topic in completed_titles else 'border-gray-200 hover:border-indigo-300' }}"
+          >
+            <span
+              class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm
+                    {{ 'bg-green-400 text-white' if topic in completed_titles else 'bg-gray-100 text-gray-400' }}"
+            >
+              {{ '✓' if topic in completed_titles else '' }}
+            </span>
+            <span
+              class="font-medium {{ 'text-green-700' if topic in completed_titles else 'text-gray-700' }}"
+            >
+              {{ topic }}
+            </span>
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+
+      {% if passed_attempt %}
+      <div
+        class="bg-green-50 border-2 border-green-300 rounded-xl p-5 text-center"
+      >
+        <p class="text-3xl mb-1">🎉</p>
+        <p class="font-semibold text-green-700">Level Complete!</p>
+        <p class="text-sm text-green-600">
+          You scored {{ passed_attempt['score'] }}% and unlocked the next level.
+        </p>
+      </div>
+      {% elif all_lessons_done %}
+      <a
+        href="{{ url_for('student.quiz', week_number=week_number) }}"
+        class="block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 rounded-xl shadow-md transition"
+      >
+        🚀 Take the Quiz!
+      </a>
+      {% else %}
+      <p class="text-center text-sm text-gray-400">
+        Finish all lessons above to unlock the quiz 🔒
+      </p>
+      {% endif %}
     </div>
     {% endblock %}
   </body>

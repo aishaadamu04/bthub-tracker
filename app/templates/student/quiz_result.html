@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    {% extends "base.html" %} {% block title %}Quiz Result{% endblock %} {%
+    block content %}
+    <div class="max-w-md mx-auto px-4 py-16 text-center">
+      {% if passed %}
+      <p class="text-6xl mb-4">🎉</p>
+      <h1 class="text-2xl font-bold text-green-600 mb-2">You passed!</h1>
+      <p class="text-gray-600 mb-6">
+        You scored {{ score }}% (needed {{ unlock_score }}%). Next level
+        unlocked!
+      </p>
+      {% else %}
+      <p class="text-6xl mb-4">💪</p>
+      <h1 class="text-2xl font-bold text-orange-500 mb-2">Almost there!</h1>
+      <p class="text-gray-600 mb-6">
+        You scored {{ score }}% (needed {{ unlock_score }}%). Review the lessons
+        and try again!
+      </p>
+      {% endif %}
+
+      <a
+        href="{{ url_for('student.dashboard') }}"
+        class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl shadow-md transition"
+      >
+        Back to Dashboard
+      </a>
+    </div>
+    {% endblock %}
+  </body>
+</html>

@@ -22,25 +22,40 @@
       <div class="grid gap-4 sm:grid-cols-2">
         {% for item in children_data %}
         <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          <h3 class="text-lg font-semibold text-gray-900 mb-1">
             {{ item['child']['full_name'] }}
           </h3>
-          <p class="text-sm text-gray-600">
-            Username:
-            <span class="font-medium">{{ item['child']['username'] }}</span>
+          <p class="text-sm text-gray-600 mb-3">
+            {{ item['level_info'].get('week', 'N/A') }} &mdash; {{
+            item['level_info'].get('title', 'N/A') }}
           </p>
-          <p class="text-sm text-gray-600">
-            Current Level:
-            <span class="font-medium"
-              >{{ item['child']['current_level'] }}</span
-            >
-            &mdash; {{ item['level_info'].get('title', 'N/A') }}
+
+          <div class="w-full bg-gray-100 rounded-full h-2 mb-1 overflow-hidden">
+            <div
+              class="bg-blue-500 h-2 rounded-full transition-all duration-500"
+              style="width: {{ item['percent_complete'] }}%"
+            ></div>
+          </div>
+          <p class="text-xs text-gray-500 mb-3">
+            {{ item['completed_lessons'] }} / {{ item['total_lessons'] }}
+            lessons complete
           </p>
-          <p class="text-sm text-gray-600">
-            Week:
-            <span class="font-medium"
-              >{{ item['level_info'].get('week', 'N/A') }}</span
+
+          {% if item['latest_quiz'] %}
+          <p class="text-sm mb-1">
+            Latest quiz:
+            <span
+              class="font-medium {{ 'text-green-600' if item['latest_quiz']['passed'] else 'text-orange-500' }}"
             >
+              {{ item['latest_quiz']['score'] }}% {{ '(Passed)' if
+              item['latest_quiz']['passed'] else '(Not passed yet)' }}
+            </span>
+          </p>
+          {% endif %}
+
+          <p class="text-xs text-gray-400">
+            Last active: {{ item['child']['last_active'] if
+            item['child']['last_active'] else 'Never' }}
           </p>
         </div>
         {% endfor %}

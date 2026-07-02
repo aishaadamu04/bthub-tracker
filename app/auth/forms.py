@@ -7,14 +7,14 @@ class ParentRegistrationForm:
         self.phone_number = data.get('phone_number', '').strip()
         self.email = data.get('email','').strip()
         self.password = data.get('password','').strip()
-        self.confrim_password = data.get('confrim_password','').strip()
+        self.confirm_password = data.get('confirm_password','').strip()
         
 
     def validate(self):
         errors = []
         if not self.full_name:
             errors.append('Full name is required')
-        if self.password != self.confrim_password:
+        if self.password != self.confirm_password:
             errors.append("password do not match")
         if not self.password:
             errors.append('Password is required')
@@ -29,12 +29,12 @@ class ChildRegistrationForm:
         self.full_name = data.get('full_name', '')
         self.username = data.get('username', '')
         self.password = data.get('password', '')
-        self.confrim_password = data.get('confrim_password', '')
+        self.confirm_password = data.get('confirm_password', '')
         self.parent_phone = data.get('parent_phone', '')
 
     def validate(self):
         errors = []
-        if self.password != self.confrim_password:
+        if self.password != self.confirm_password:
             errors.append("passwords do not match")
         if not self.full_name:
             errors.append('fullname required')

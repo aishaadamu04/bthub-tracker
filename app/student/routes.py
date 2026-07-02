@@ -43,7 +43,7 @@ def dashboard():
 
     # has this child already passed the quiz for this level?
     passed_attempt = query_db(
-        "SELECT * FROM quiz_attempts WHERE child_id = ? AND week_number = ? AND passed = 1",
+        "SELECT * FROM quiz_attempts WHERE child_id = ? AND week_number = ? AND passed = True",
         [child['id'], week_number], one=True
     )
 

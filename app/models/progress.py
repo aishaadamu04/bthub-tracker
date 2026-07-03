@@ -12,49 +12,49 @@ CURRICULUM_LEVELS = {
         "week": "W1",
         "title": "Intro to Programming",
         "topics": ["What is code?", "Variables", "Print statements"],
-        "unlock_score": 60
+        "pass_score": 60
     },
     2: {
         "week": "W2",
         "title": "Data Types & Input",
         "topics": ["Strings", "Integers", "User input"],
-        "unlock_score": 60
+        "pass_score": 60
     },
     3: {
         "week": "W3",
         "title": "Conditionals",
         "topics": ["if/else", "Comparison operators", "Nested conditions"],
-        "unlock_score": 60
+        "pass_score": 60
     },
     4: {
         "week": "W4",
         "title": "Loops",
         "topics": ["for loops", "while loops", "range()"],
-        "unlock_score": 60
+        "pass_score": 60
     },
     5: {
         "week": "W5",
         "title": "Functions",
         "topics": ["Defining functions", "Parameters", "Return values"],
-        "unlock_score": 65
+        "pass_score": 65
     },
     6: {
         "week": "W6",
         "title": "Lists & Dictionaries",
         "topics": ["Lists", "Dictionaries", "Looping over collections"],
-        "unlock_score": 65
+        "pass_score": 65
     },
     7: {
         "week": "W7",
         "title": "Introduction to OOP",
         "topics": ["Classes", "Attributes", "Methods"],
-        "unlock_score": 70
+        "pass_score": 70
     },
     8: {
         "week": "W8",
         "title": "Professional Project Setup",
         "topics": ["Project structure", "PyTest", "Documentation"],
-        "unlock_score": 70
+        "pass_score": 70
     }
 }
 

@@ -8,6 +8,20 @@
     {% block content %}
     <div class="max-w-2xl mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-8">
+        {% if lessons_reset %}
+        <div
+          class="bg-orange-50 border-2 border-orange-300 rounded-xl p-4 mb-6 text-center"
+        >
+          <p class="text-2xl mb-1">💪</p>
+          <p class="font-semibold text-orange-700">
+            Let's review the lessons again!
+          </p>
+          <p class="text-sm text-orange-600">
+            After 3 tries, it helps to go through the material once more before
+            the next attempt.
+          </p>
+        </div>
+        {% endif %}
         <h1 class="text-2xl font-bold text-gray-900">
           Hey, {{ child['full_name'] }}! 👋
         </h1>

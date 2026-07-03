@@ -12,7 +12,7 @@ CURRICULUM_LEVELS = {
         "week": "W1",
         "title": "Intro to Programming",
         "topics": ["What is code?", "Variables", "Print statements"],
-        "unlock_score": 0
+        "unlock_score": 60
     },
     2: {
         "week": "W2",

@@ -4,6 +4,8 @@ from . import student_bp
 from ..database.db import query_db, execute_db
 from ..models.progress import CURRICULUM_LEVELS
 
+MAX_FAILED_ATTEMPTS = 3
+
 
 def login_required(f):
     from functools import wraps
@@ -23,14 +25,34 @@ def dashboard():
         [session['user_id']], one=True
     )
 
-    # update last_active every time the dashboard loads
     execute_db(
         "UPDATE children SET last_active = ? WHERE id = ?",
         [datetime.now(), child['id']]
     )
 
-    level_info = CURRICULUM_LEVELS.get(child['current_level'], {})
     week_number = child['current_level']
+    level_info = CURRICULUM_LEVELS.get(week_number, {})
+
+    # --- check failed attempt count for this level ---
+    failed_count_row = query_db(
+        "SELECT COUNT(*) as c FROM quiz_attempts WHERE child_id = ? AND week_number = ? AND passed = FALSE",
+        [child['id'], week_number], one=True
+    )
+    failed_count = failed_count_row['c'] if failed_count_row else 0
+
+    lessons_reset = False
+    if failed_count >= MAX_FAILED_ATTEMPTS:
+        # reset lesson checkboxes for this level
+        execute_db(
+            "UPDATE progress SET completed = FALSE, completed_at = NULL WHERE child_id = ? AND week_number = ?",
+            [child['id'], week_number]
+        )
+        # clear the failed attempts so counting starts fresh next time
+        execute_db(
+            "DELETE FROM quiz_attempts WHERE child_id = ? AND week_number = ? AND passed = FALSE",
+            [child['id'], week_number]
+        )
+        lessons_reset = True
 
     progress = query_db(
         "SELECT * FROM progress WHERE child_id = ? AND week_number = ?",
@@ -41,9 +63,8 @@ def dashboard():
     topics = level_info.get('topics', [])
     all_lessons_done = len(topics) > 0 and all(t in completed_titles for t in topics)
 
-    # has this child already passed the quiz for this level?
     passed_attempt = query_db(
-        "SELECT * FROM quiz_attempts WHERE child_id = ? AND week_number = ? AND passed = True",
+        "SELECT * FROM quiz_attempts WHERE child_id = ? AND week_number = ? AND passed = TRUE",
         [child['id'], week_number], one=True
     )
 
@@ -54,7 +75,8 @@ def dashboard():
                             topics=topics,
                             completed_titles=completed_titles,
                             all_lessons_done=all_lessons_done,
-                            passed_attempt=passed_attempt)
+                            passed_attempt=passed_attempt,
+                            lessons_reset=lessons_reset)
 
 
 @student_bp.route('/lesson/toggle', methods=['POST'])
@@ -92,6 +114,19 @@ def quiz(week_number):
         [session['user_id']], one=True
     )
     level_info = CURRICULUM_LEVELS.get(week_number, {})
+
+    # guard: block direct access if lessons aren't actually done
+    progress = query_db(
+        "SELECT * FROM progress WHERE child_id = ? AND week_number = ?",
+        [child['id'], week_number]
+    )
+    completed_titles = [p['lesson_title'] for p in progress if p['completed']]
+    topics = level_info.get('topics', [])
+    all_lessons_done = len(topics) > 0 and all(t in completed_titles for t in topics)
+
+    if not all_lessons_done:
+        return redirect(url_for('student.dashboard'))
+
     questions = query_db(
         "SELECT * FROM quiz_questions WHERE week_number = ?",
         [week_number]
